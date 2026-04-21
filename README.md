@@ -1,2 +1,10 @@
 # DBSProject
-DBS Project 
+DBS Project
+
+
+Tech Stack: HTML/CSS/JS
+
+
+
+
+

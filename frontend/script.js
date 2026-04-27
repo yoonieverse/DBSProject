@@ -41,7 +41,7 @@ function renderEmployees(list) {
       <td>${e.email}</td>
       <td>${e.phone}</td>
       <td>${e.since}</td>
-      <td><button>Edit</button></td>
+      <td><button class="btn-ghost">Edit</button></td>
     </tr>
   `).join("");
   } else {
@@ -69,6 +69,20 @@ function filterEmployees() {
     (!dept || e.dept === dept) &&
     (!role || e.role === role)
   ));
+}
+
+function filterManager() {
+  const id = document.getElementById("emp-id").value.trim().toLowerCase();
+  const isManager = employees.some(e =>
+      e.id.toLowerCase() === id &&
+      e.role === 'Manager')
+  if (isManager) {
+    document.querySelector('.filter-panel').removeAttribute('hidden');
+    document.querySelector('.filter-panel').style.display = 'block';
+  } else {
+    document.querySelector('.filter-panel').setAttribute('hidden', 'true');
+    document.querySelector('.filter-panel').style.display = 'none';
+  }
 }
 
 function resetEmp() {

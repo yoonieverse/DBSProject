@@ -19,8 +19,15 @@
       <a href="index.html" class="active">Admin Portal</a>
     </nav>
   </header>
+
+  <div class="container">
+    <label for="emp-id"><b>Login</b></label>
+    <input type="text" id="emp-id" placeholder="Manager ID" required>
+    <button type="button" onclick="filterManager()">Submit</button>
+
+  </div>
 <!--Filter panel-->
-  <div class="filter-panel">
+  <div class="filter-panel" hidden>
     <h2>Employees</h2>
     <div class="filter-grid">
       <div class="filter-group">
@@ -129,8 +136,8 @@
     <div class="filter-actions">
       <button class="btn-search" onclick="filterEmployees()">Search Employees</button>
       <button class="btn-search" onclick="filterBooks()">Search Books</button>
-        <button class="btn-search" onclick="filterTxns()">Search Transactions</button>
-        <button class="btn-ghost" onclick="resetEmp(), resetTxns(), resetForm()" >Reset All</button>
+      <button class="btn-search" onclick="filterTxns()">Search Transactions</button>
+      <button class="btn-ghost"  onclick="resetEmp(), resetTxns(), resetForm()" >Reset All</button>
     </div>
   </div>
 

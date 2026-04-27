@@ -105,13 +105,30 @@ function statusBadge(s) {
 
 function renderTxns(list) {
   const tbody = document.getElementById("txn-tbody");
+  const tbodyAdmin = document.getElementById("txn-tbody-admin");
   const tableWrap = document.getElementById("txn-table");
-  if (!tbody) return;
+  if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
 
   if (list.length === 0) {
     tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No transactions found.</td></tr>';
+  }
+
+  if( tbodyAdmin ) {
+    tbodyAdmin.innerHTML = list.map(t => `
+    <tr>
+      <td class="id-cell">${t.id}</td>
+      <td>${t.date}</td>
+      <td>${t.customer}</td>
+      <td>${t.books}</td>
+      <td>${t.employee}</td>
+      <td>${t.method}</td>
+      <td>$${t.total.toFixed(2)}</td>
+      <td>${statusBadge(t.status)}</td>
+      <td><button>Edit</button></td>
+    </tr>
+  `).join("");
   } else {
     tbody.innerHTML = list.map(t => `
       <tr>
@@ -192,8 +209,9 @@ const books = [
 
 function renderBooks(list) {
   const tbody = document.getElementById("book-tbody");
+  const tbodyAdmin = document.getElementById("book-tbody-admin");
   const tableWrap = document.getElementById("book-table");
-  if (!tbody) return;
+  if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
 
@@ -202,7 +220,20 @@ function renderBooks(list) {
     return;
   }
 
-  tbody.innerHTML = list.map(b => `
+  if( tbodyAdmin ) {
+    tbodyAdmin.innerHTML = list.map(b => `
+    <tr>
+      <td>${b.title}</td>
+      <td>${b.author}</td>
+      <td>${b.genre}</td>
+      <td class="isbn-cell">${b.isbn}</td>
+      <td>$${b.price.toFixed(2)}</td>
+      <td class="${b.stock <= 3 ? 'stock-low' : 'stock-ok'}">${b.stock}</td>
+      <td><button>Edit</button></td>
+    </tr>
+  `).join("");
+  } else {
+    tbody.innerHTML = list.map(b => `
     <tr>
       <td>${b.title}</td>
       <td>${b.author}</td>
@@ -212,6 +243,7 @@ function renderBooks(list) {
       <td class="${b.stock <= 3 ? 'stock-low' : 'stock-ok'}">${b.stock}</td>
     </tr>
   `).join("");
+  }
 }
 
 function filterBooks() {

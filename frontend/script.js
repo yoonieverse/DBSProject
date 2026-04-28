@@ -41,7 +41,8 @@ function renderEmployees(list) {
       <td>${e.email}</td>
       <td>${e.phone}</td>
       <td>${e.since}</td>
-      <td><button class="btn-ghost">Edit</button></td>
+<!--      <td><button class="btn-ghost">Edit</button></td>-->
+      <td><a href="edit.html" class="logo">Edit</a></td>
     </tr>
   `).join("");
   } else {

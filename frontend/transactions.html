@@ -9,10 +9,10 @@
 <body>
 
 <header>
-  <div class="logo">T1 <span>/ Bookstore</span></div>
+  <a class="logo" href= "menu.html">Stables and Peasants</div>
   <nav>
     <a href="books.html">Books</a>
-    <a href="index.html">Employees</a>
+    <a href="employees.html">Employees</a>
     <a href="transactions.html" class="active">Transactions</a>
     <a href="admin.html">Admin Portal</a>
   </nav>
@@ -65,6 +65,7 @@
       <div class="filter-group">
         <label for="txn-status">Status</label>
         <select id="txn-status">
+          <option value="default">Select an option</option>
           <option value="">All Statuses</option>
           <option>Completed</option>
           <option>Pending</option>
@@ -74,6 +75,7 @@
       <div class="filter-group">
         <label for="txn-method">Payment</label>
         <select id="txn-method">
+          <option value="default">Select an option</option>
           <option value="">All Methods</option>
           <option>Credit Card</option>
           <option>Cash</option>

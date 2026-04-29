@@ -18,6 +18,8 @@ header {
 header .logo {
   font-weight: bold;
   font-size: 1.2rem;
+  text-decoration: none;
+  color:inherit;
 }
 
 header nav a {
@@ -36,6 +38,11 @@ header nav a.active {
 header nav a:hover {
   background: #e0e0e0;
 }
+
+/* header nav a:visited {
+  background: #e0e0e0;
+} */
+
 
 main {
   max-width: 1200px;
@@ -193,4 +200,30 @@ footer {
   font-size: 0.85rem;
   color: #666;
   text-align: center;
+}
+
+ul {
+  list-style: none; 
+  padding: 0;
+  margin: 0;
+}
+
+li{
+  margin: 15px 0;
+}
+
+li a {
+  display: block;
+  width: 100%;
+  padding: 20px;
+  text-decoration: none;
+  font-size: 20px;
+  border-radius: 10px;
+  transition: 0.3s;
+  background-color:#007bff;
+  color: white;
+}
+
+li a:hover{
+  background-color:#0056b3;
 }

@@ -1,5 +1,3 @@
-
-
 /* Employees */
 const employees = [
   {
@@ -200,8 +198,8 @@ function filterTxns() {
 function resetTxns() {
   ["txn-id", "cust-name", "emp-filter", "date-from", "date-to"]
     .forEach(id => document.getElementById(id).value = "");
-  document.getElementById("txn-status").value = "";
-  document.getElementById("txn-method").value = "";
+  document.getElementById("txn-status").value = "default";
+  document.getElementById("txn-method").value = "default";
   const tableWrap = document.getElementById("txn-table");
   if (tableWrap) tableWrap.style.display = "none";
 }
@@ -281,7 +279,7 @@ function filterBooks() {
 function resetForm() {
   ["title", "author", "isbn", "price_min", "price_max"]
     .forEach(id => document.getElementById(id).value = "");
-  document.getElementById("genre").value = "";
+  document.getElementById("genre").value = "default";
   const tableWrap = document.getElementById("book-table");
   if (tableWrap) tableWrap.style.display = "none";
 }

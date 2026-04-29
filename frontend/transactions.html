@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T1 Bookstore — Transactions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <a class="logo" href= "menu.html">Stables and Peasants</div>
+  <nav>
+    <a href="books.html">Books</a>
+    <a href="employees.html">Employees</a>
+    <a href="transactions.html" class="active">Transactions</a>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1>Transactions</h1>
+    <p>Sales records &amp; payment history</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Total</div>
+      <div class="stat-value" id="stat-total">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Completed</div>
+      <div class="stat-value" id="stat-comp">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Pending</div>
+      <div class="stat-value" id="stat-pend">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Refunded</div>
+      <div class="stat-value" id="stat-ref">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Revenue</div>
+      <div class="stat-value" id="stat-rev">—</div>
+    </div>
+  </div>
+
+  <div class="filter-panel">
+    <h2>Filter</h2>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label for="txn-id">Transaction ID</label>
+        <input type="text" id="txn-id" placeholder="TXN-…">
+      </div>
+      <div class="filter-group">
+        <label for="cust-name">Customer</label>
+        <input type="text" id="cust-name" placeholder="Customer name…">
+      </div>
+      <div class="filter-group">
+        <label for="emp-filter">Employee</label>
+        <input type="text" id="emp-filter" placeholder="Employee name…">
+      </div>
+      <div class="filter-group">
+        <label for="txn-status">Status</label>
+        <select id="txn-status">
+          <option value="default">Select an option</option>
+          <option value="">All Statuses</option>
+          <option>Completed</option>
+          <option>Pending</option>
+          <option>Refunded</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="txn-method">Payment</label>
+        <select id="txn-method">
+          <option value="default">Select an option</option>
+          <option value="">All Methods</option>
+          <option>Credit Card</option>
+          <option>Cash</option>
+          <option>Bank Transfer</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="date-from">From</label>
+        <input type="date" id="date-from">
+      </div>
+      <div class="filter-group">
+        <label for="date-to">To</label>
+        <input type="date" id="date-to">
+      </div>
+      <div class="filter-actions">
+        <button class="btn-search" onclick="filterTxns()">Search</button>
+        <button class="btn-ghost" onclick="resetTxns()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap" id="txn-table" style="display: none">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Books</th>
+          <th>Employee</th>
+          <th>Method</th>
+          <th>Total</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="txn-tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <span>DBS Bookstore Management System</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

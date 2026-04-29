@@ -29,7 +29,7 @@
       <div class="stat-label">Total</div>
       <div class="stat-value" id="stat-total">—</div>
     </div>
-    <div class="stat-card">
+    <!-- <div class="stat-card">
       <div class="stat-label">Completed</div>
       <div class="stat-value" id="stat-comp">—</div>
     </div>
@@ -40,7 +40,7 @@
     <div class="stat-card">
       <div class="stat-label">Refunded</div>
       <div class="stat-value" id="stat-ref">—</div>
-    </div>
+    </div> -->
     <div class="stat-card">
       <div class="stat-label">Revenue</div>
       <div class="stat-value" id="stat-rev">—</div>
@@ -62,7 +62,7 @@
         <label for="emp-filter">Employee</label>
         <input type="text" id="emp-filter" placeholder="Employee name…">
       </div>
-      <div class="filter-group">
+      <!-- <div class="filter-group">
         <label for="txn-status">Status</label>
         <select id="txn-status">
           <option value="">All Statuses</option>
@@ -70,8 +70,8 @@
           <option>Pending</option>
           <option>Refunded</option>
         </select>
-      </div>
-      <div class="filter-group">
+      </div> -->
+      <!-- <div class="filter-group">
         <label for="txn-method">Payment</label>
         <select id="txn-method">
           <option value="">All Methods</option>
@@ -79,7 +79,7 @@
           <option>Cash</option>
           <option>Bank Transfer</option>
         </select>
-      </div>
+      </div> -->
       <div class="filter-group">
         <label for="date-from">From</label>
         <input type="date" id="date-from">
@@ -89,7 +89,7 @@
         <input type="date" id="date-to">
       </div>
       <div class="filter-actions">
-        <button class="btn-search" onclick="filterTxns()">Search</button>
+        <button class="btn-search" onclick="filterTransactions()">Search</button>
         <button class="btn-ghost" onclick="resetTxns()">Reset</button>
       </div>
     </div>
@@ -100,13 +100,10 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Date</th>
+          <th>Date/Time</th>
           <th>Customer</th>
-          <th>Books</th>
           <th>Employee</th>
-          <th>Method</th>
-          <th>Total</th>
-          <th>Status</th>
+          <th>Total Price</th>
         </tr>
       </thead>
       <tbody id="txn-tbody"></tbody>

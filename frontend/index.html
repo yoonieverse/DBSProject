@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -80,6 +80,78 @@
   <span>DBS Bookstore Management System</span>
 </footer>
 
+
+<script src="script.js"></script>
+</body>
+</html>  -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T1 Bookstore — Employees</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="logo">T1 <span>/ Bookstore </span></div>
+  <nav>
+    <a href="books.html">Books</a>
+    <a href="index.html" class="active">Employees</a>
+    <a href="transactions.html">Transactions</a>
+    <a href="admin.html">Admin Portal</a>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1>Employees</h1>
+    <p>Staff directory</p>
+  </div>
+
+  <div class="filter-panel">
+    <h2>Filter</h2>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label for="emp-name">Name</label>
+        <input type="text" id="emp-name" placeholder="Search name…">
+      </div>
+      <div class="filter-group">
+        <label for="emp-position">Position</label>
+        <select id="emp-position">
+          <option value="">All Positions</option>
+          <option>Sales Associate</option>
+          <option>Assistant Manager</option>
+          <option>Book Seller</option>
+          <option>Manager</option>
+        </select>
+      </div>
+      <div class="filter-actions">
+        <button class="btn-search" onclick="filterEmployees()">Search</button>
+        <button class="btn-ghost" onclick="resetEmp()">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-wrap" id="emp-table" style="display: none">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Position</th>
+        </tr>
+      </thead>
+      <tbody id="emp-tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>
+  <span>DBS Bookstore Management System</span>
+</footer>
 
 <script src="script.js"></script>
 </body>

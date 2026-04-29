@@ -16,19 +16,35 @@ const employees = [
 
 function renderEmployees(list) {
   const tbody = document.getElementById("emp-tbody");
+  const tbodyAdmin = document.getElementById("emp-tbody-admin");
   const tableWrap = document.getElementById("emp-table");
-  if (!tbody) return;
+  if (!tbody && !tbodyAdmin) return;
 
-  tableWrap.style.display = "block"; //
+  tableWrap.style.display = "block";
 
 
-  // If theres 
+  // If there is no employees
   if (list.length === 0) {
     tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No employees found.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = list.map(e => `
+  if( tbodyAdmin ) {
+    tbodyAdmin.innerHTML = list.map(e => `
+    <tr>
+      <td class="id-cell">${e.id}</td>
+      <td>${e.name}</td>
+      <td>${e.role}</td>
+      <td>${e.dept}</td>
+      <td>${e.email}</td>
+      <td>${e.phone}</td>
+      <td>${e.since}</td>
+<!--      <td><button class="btn-ghost">Edit</button></td>-->
+      <td><a href="edit.html" class="logo">Edit</a></td>
+    </tr>
+  `).join("");
+  } else {
+    tbody.innerHTML = list.map(e => `
     <tr>
       <td class="id-cell">${e.id}</td>
       <td>${e.name}</td>
@@ -39,6 +55,7 @@ function renderEmployees(list) {
       <td>${e.since}</td>
     </tr>
   `).join("");
+  }
 }
 
 function filterEmployees() {
@@ -53,10 +70,24 @@ function filterEmployees() {
   ));
 }
 
+function filterManager() {
+  const id = document.getElementById("emp-id").value.trim().toLowerCase();
+  const isManager = employees.some(e =>
+      e.id.toLowerCase() === id &&
+      e.role === 'Manager')
+  if (isManager) {
+    document.querySelector('.filter-panel').removeAttribute('hidden');
+    document.querySelector('.filter-panel').style.display = 'block';
+  } else {
+    document.querySelector('.filter-panel').setAttribute('hidden', 'true');
+    document.querySelector('.filter-panel').style.display = 'none';
+  }
+}
+
 function resetEmp() {
   document.getElementById("emp-name").value = "";
-  document.getElementById("emp-dept").value = "default";
-  document.getElementById("emp-role").value = "default";
+  document.getElementById("emp-dept").value = "";
+  document.getElementById("emp-role").value = "";
   const tableWrap = document.getElementById("emp-table");
   if (tableWrap) tableWrap.style.display = "none";
 }
@@ -87,13 +118,30 @@ function statusBadge(s) {
 
 function renderTxns(list) {
   const tbody = document.getElementById("txn-tbody");
+  const tbodyAdmin = document.getElementById("txn-tbody-admin");
   const tableWrap = document.getElementById("txn-table");
-  if (!tbody) return;
+  if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
 
   if (list.length === 0) {
     tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No transactions found.</td></tr>';
+  }
+
+  if( tbodyAdmin ) {
+    tbodyAdmin.innerHTML = list.map(t => `
+    <tr>
+      <td class="id-cell">${t.id}</td>
+      <td>${t.date}</td>
+      <td>${t.customer}</td>
+      <td>${t.books}</td>
+      <td>${t.employee}</td>
+      <td>${t.method}</td>
+      <td>$${t.total.toFixed(2)}</td>
+      <td>${statusBadge(t.status)}</td>
+      <td><button>Edit</button></td>
+    </tr>
+  `).join("");
   } else {
     tbody.innerHTML = list.map(t => `
       <tr>
@@ -174,8 +222,9 @@ const books = [
 
 function renderBooks(list) {
   const tbody = document.getElementById("book-tbody");
+  const tbodyAdmin = document.getElementById("book-tbody-admin");
   const tableWrap = document.getElementById("book-table");
-  if (!tbody) return;
+  if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
 
@@ -184,7 +233,20 @@ function renderBooks(list) {
     return;
   }
 
-  tbody.innerHTML = list.map(b => `
+  if( tbodyAdmin ) {
+    tbodyAdmin.innerHTML = list.map(b => `
+    <tr>
+      <td>${b.title}</td>
+      <td>${b.author}</td>
+      <td>${b.genre}</td>
+      <td class="isbn-cell">${b.isbn}</td>
+      <td>$${b.price.toFixed(2)}</td>
+      <td class="${b.stock <= 3 ? 'stock-low' : 'stock-ok'}">${b.stock}</td>
+      <td><button>Edit</button></td>
+    </tr>
+  `).join("");
+  } else {
+    tbody.innerHTML = list.map(b => `
     <tr>
       <td>${b.title}</td>
       <td>${b.author}</td>
@@ -194,6 +256,7 @@ function renderBooks(list) {
       <td class="${b.stock <= 3 ? 'stock-low' : 'stock-ok'}">${b.stock}</td>
     </tr>
   `).join("");
+  }
 }
 
 function filterBooks() {

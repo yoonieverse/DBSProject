@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T1 Bookstore — Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+
+<body>
+
+  <header>
+    <div class="logo">T1 <span>/ Bookstore </span></div>
+    <nav>
+      <a href="books.html">Books</a>
+      <a href="index.html">Employees</a>
+      <a href="transactions.html">Transactions</a>
+      <a href="admin.html" class="active">Admin Portal</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <label for="emp-id"><b>Login</b></label>
+    <input type="text" id="emp-id" placeholder="Manager ID" required>
+    <button type="button" onclick="filterManager()">Submit</button>
+
+  </div>
+<!--Filter panel-->
+  <div class="filter-panel" hidden>
+    <h2>Employees</h2>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label for="emp-name">Name</label>
+        <input type="text" id="emp-name" placeholder="Search name…">
+      </div>
+      <div class="filter-group">
+        <label for="emp-dept">Department</label>
+        <select id="emp-dept">
+          <option value="">All Departments</option>
+          <option>Management</option>
+          <option>Sales</option>
+          <option>Inventory</option>
+          <option>Customer Service</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="emp-role">Role</label>
+        <select id="emp-role">
+          <option value="">All Roles</option>
+          <option>Manager</option>
+          <option>Associate</option>
+          <option>Cashier</option>
+          <option>Stock Clerk</option>
+        </select>
+      </div>
+    </div>
+    <h2>Books</h2>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label for="title">Title</label>
+        <input type="text" id="title" placeholder="Search title…">
+      </div>
+      <div class="filter-group">
+        <label for="author">Author</label>
+        <input type="text" id="author" placeholder="Author name…">
+      </div>
+      <div class="filter-group">
+        <label for="isbn">ISBN</label>
+        <input type="text" id="isbn" placeholder="978-…">
+      </div>
+      <div class="filter-group">
+        <label for="genre">Genre</label>
+        <select id="genre">
+          <option value="">All Genres</option>
+          <option>Fiction</option>
+          <option>Non-Fiction</option>
+          <option>Mystery</option>
+          <option>Science Fiction</option>
+          <option>Biography</option>
+          <option>History</option>
+          <option>Children</option>
+          <!-- Add more later idk -->
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Price Range</label>
+        <div class="price-range">
+          <input type="number" id="price_min" placeholder="Min" step="0.01">
+          <input type="number" id="price_max" placeholder="Max" step="0.01">
+        </div>
+      </div>
+
+    </div>
+    <h2>Transactions</h2>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label for="txn-id">Transaction ID</label>
+        <input type="text" id="txn-id" placeholder="TXN-…">
+      </div>
+      <div class="filter-group">
+        <label for="cust-name">Customer</label>
+        <input type="text" id="cust-name" placeholder="Customer name…">
+      </div>
+      <div class="filter-group">
+        <label for="emp-filter">Employee</label>
+        <input type="text" id="emp-filter" placeholder="Employee name…">
+      </div>
+      <div class="filter-group">
+        <label for="txn-status">Status</label>
+        <select id="txn-status">
+          <option value="">All Statuses</option>
+          <option>Completed</option>
+          <option>Pending</option>
+          <option>Refunded</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="txn-method">Payment</label>
+        <select id="txn-method">
+          <option value="">All Methods</option>
+          <option>Credit Card</option>
+          <option>Cash</option>
+          <option>Bank Transfer</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="date-from">From</label>
+        <input type="date" id="date-from">
+      </div>
+      <div class="filter-group">
+        <label for="date-to">To</label>
+        <input type="date" id="date-to">
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button class="btn-search" onclick="filterEmployees()">Search Employees</button>
+      <button class="btn-search" onclick="filterBooks()">Search Books</button>
+      <button class="btn-search" onclick="filterTxns()">Search Transactions</button>
+      <button class="btn-ghost"  onclick="resetEmp(), resetTxns(), resetForm()" >Reset All</button>
+    </div>
+  </div>
+
+<!--  emp table -->
+  <div class="table-wrap" id="emp-table" style="display: none">
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Department</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Since</th>
+        <th>Edit</th>
+      </tr>
+      </thead>
+      <tbody id="emp-tbody-admin"></tbody>
+    </table>
+  </div>
+
+
+  <!--Books-->
+  <div class="table-wrap" id="book-table" style="display: none">
+    <table>
+      <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Genre</th>
+        <th>ISBN</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Edit</th>
+      </tr>
+      </thead>
+      <tbody id="book-tbody-admin"></tbody>
+    </table>
+  </div>
+
+  <!--  Transactions-->
+  <div class="table-wrap" id="txn-table" style="display: none">
+    <table>
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Customer</th>
+        <th>Books</th>
+        <th>Employee</th>
+        <th>Method</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Edit</th>
+      </tr>
+      </thead>
+      <tbody id="txn-tbody-admin"></tbody>
+    </table>
+  </div>
+  <footer>
+    <span>DBS Bookstore Management System</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

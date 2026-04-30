@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>T1 Bookstore — Admin</title>
+  <title>Stables and Peasants — Admin</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,21 +11,32 @@
 <body>
 
   <header>
-    <div class="logo">T1 <span>/ Bookstore </span></div>
+    <a class="logo" href= "menu.html">Stables and Peasants</div>
     <nav>
       <a href="books.html">Books</a>
-      <a href="index.html">Employees</a>
       <a href="transactions.html">Transactions</a>
       <a href="admin.html" class="active">Admin Portal</a>
     </nav>
   </header>
 
-  <div class="container">
+  <div class="login-wrapper">
+  <div class="login-card">
+    <h2 class="login-title">Admin Portal</h2>
+    <p class="login-sub">Enter Manager ID</p>
+    <div class="login-field">
+      <input type="text" id="emp-id" placeholder="e.g. MGR-001" autocomplete="off">
+    </div>
+    <button type="button" class="login-btn" onclick="filterManager()">Sign In</button>
+    <p id="login-msg" class="login-msg" aria-live="polite"></p>
+  </div>
+</div>
+
+  <!-- <div class="container">
     <label for="emp-id"><b>Login</b></label>
     <input type="text" id="emp-id" placeholder="Manager ID" required>
     <button type="button" onclick="filterManager()">Submit</button>
 
-  </div>
+  </div> -->
 <!--Filter panel-->
   <div class="filter-panel" hidden>
     <h2>Employees</h2>

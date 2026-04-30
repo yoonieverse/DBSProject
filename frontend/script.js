@@ -71,16 +71,29 @@ function filterEmployees() {
 }
 
 function filterManager() {
-  const id = document.getElementById("emp-id").value.trim().toLowerCase();
-  const isManager = employees.some(e =>
-      e.id.toLowerCase() === id &&
-      e.role === 'Manager')
-  if (isManager) {
-    document.querySelector('.filter-panel').removeAttribute('hidden');
-    document.querySelector('.filter-panel').style.display = 'block';
+  const input = document.getElementById('emp-id').value.trim();
+  const msg = document.getElementById('login-msg');
+
+  if (!input) {
+    msg.textContent = 'Please enter a Manager ID.';
+    msg.className = 'login-msg error';
+    return;
+  }
+
+  // Valid IDs:  
+  const validIds = ['MGR-001', 'E001'];
+
+  if (validIds.includes(input)) {
+    msg.textContent = 'Logging in...';
+    msg.className = 'login-msg success';
+    setTimeout(() => {
+      document.querySelector('.login-wrapper').style.display = 'none';
+      document.querySelector('.filter-panel').hidden = false;
+    }, 500); // brief pause so user sees the success message
   } else {
-    document.querySelector('.filter-panel').setAttribute('hidden', 'true');
-    document.querySelector('.filter-panel').style.display = 'none';
+    msg.textContent = 'Invalid. Please try again.';
+    msg.className = 'login-msg error';
+    document.getElementById('emp-id').focus();
   }
 }
 

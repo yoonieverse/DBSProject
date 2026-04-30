@@ -6,7 +6,7 @@ Tech Stack: HTML/CSS/JS frontend + Express.js backend
 ### Install Dependecies
 `cd backend`\
 `npm install mysql2 cors dotenv express`\
-`touch .env`\
+`touch .env`
 
 
 ### To Run

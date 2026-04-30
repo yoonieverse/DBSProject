@@ -95,6 +95,41 @@
     </div>
   </div>
 
+  <div class="filter-panel">
+    <h2>Insert Transaction</h2>
+    <div class="filter-grid">
+      <div class="filter-group">
+        <label for="insert-txn-id">Transaction ID</label>
+        <input type="number" id="insert-txn-id" placeholder="1001" min="1" step="1">
+      </div>
+      <div class="filter-group">
+        <label for="insert-txn-date">Date</label>
+        <input type="datetime-local" id="insert-txn-date">
+      </div>
+      <div class="filter-group">
+        <label for="insert-txn-total">Total Price</label>
+        <input type="number" id="insert-txn-total" placeholder="29.99" min="0" step="0.01">
+      </div>
+      <div class="filter-group">
+        <label for="insert-txn-card">Card Number</label>
+        <input type="text" id="insert-txn-card" placeholder="16 digits" maxlength="16" inputmode="numeric">
+      </div>
+      <div class="filter-group">
+        <label for="insert-txn-employee">Assisting Employee</label>
+        <input type="number" id="insert-txn-employee" placeholder="Employee ID" min="1" step="1">
+      </div>
+      <div class="filter-group">
+        <label for="insert-txn-customer">Customer ID</label>
+        <input type="number" id="insert-txn-customer" placeholder="Optional" min="1" step="1">
+      </div>
+      <div class="filter-actions">
+        <button class="btn-search" onclick="insertTransaction()">Insert</button>
+        <button class="btn-ghost" onclick="resetInsertTransaction()">Clear</button>
+      </div>
+    </div>
+    <p id="insert-txn-message" class="form-message" aria-live="polite"></p>
+  </div>
+
   <div class="table-wrap" id="txn-table" style="display: none">
     <table>
       <thead>

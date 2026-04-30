@@ -14,6 +14,7 @@
     <a href="books.html">Books</a>
     <a href="employees.html" class="active">Employees</a>
     <a href="transactions.html">Transactions</a>
+    <a href="admin.html">Admin Portal</a>
   </nav>
 </header>
 
@@ -31,24 +32,13 @@
         <input type="text" id="emp-name" placeholder="Search name…">
       </div>
       <div class="filter-group">
-        <label for="emp-dept">Department</label>
-        <select id="emp-dept">
-          <option value="default">Select a Department</option>
-          <option value="">All Departments</option>
-          <option>Management</option>
-          <option>Sales</option>
-          <option>Inventory</option>
-          <option>Customer Service</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label for="emp-role">Role</label>
-        <select id="emp-role">
-          <option value="">All Roles</option>
+        <label for="emp-position">Position</label>
+        <select id="emp-position">
+          <option value="">All Positions</option>
+          <option>Sales Associate</option>
+          <option>Assistant Manager</option>
+          <option>Book Seller</option>
           <option>Manager</option>
-          <option>Associate</option>
-          <option>Cashier</option>
-          <option>Stock Clerk</option>
         </select>
       </div>
       <div class="filter-actions">
@@ -64,11 +54,7 @@
         <tr>
           <th>ID</th>
           <th>Name</th>
-          <th>Role</th>
-          <th>Department</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Since</th>
+          <th>Position</th>
         </tr>
       </thead>
       <tbody id="emp-tbody"></tbody>

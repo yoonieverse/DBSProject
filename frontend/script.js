@@ -1,112 +1,4 @@
-
-
-// /* Employees */
-// const employees = [
-//   {
-
-//     /*Example Output*/
-
-//     id: "E001",
-//     name: "Mango Mango",
-//     role: "Manager",
-//     dept: "Management",
-//     email: "m.Mango@dbs.com",
-//     phone: "111-111-111",
-//     since: "2026"
-//   }
-// ];
-
-// function renderEmployees(list) {
-//   const tbody = document.getElementById("emp-tbody");
-//   const tbodyAdmin = document.getElementById("emp-tbody-admin");
-//   const tableWrap = document.getElementById("emp-table");
-//   if (!tbody && !tbodyAdmin) return;
-
-//   tableWrap.style.display = "block";
-
-
-//   // If there is no employees
-//   if (list.length === 0) {
-//     tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No employees found.</td></tr>';
-//     return;
-//   }
-
-//   if( tbodyAdmin ) {
-//     tbodyAdmin.innerHTML = list.map(e => `
-//     <tr>
-//       <td class="id-cell">${e.id}</td>
-//       <td>${e.name}</td>
-//       <td>${e.role}</td>
-//       <td>${e.dept}</td>
-//       <td>${e.email}</td>
-//       <td>${e.phone}</td>
-//       <td>${e.since}</td>
-// <!--      <td><button class="btn-ghost">Edit</button></td>-->
-//       <td><a href="edit.html" class="logo">Edit</a></td>
-//     </tr>
-//   `).join("");
-//   } else {
-//     tbody.innerHTML = list.map(e => `
-//     <tr>
-//       <td class="id-cell">${e.id}</td>
-//       <td>${e.name}</td>
-//       <td>${e.role}</td>
-//       <td>${e.dept}</td>
-//       <td>${e.email}</td>
-//       <td>${e.phone}</td>
-//       <td>${e.since}</td>
-//     </tr>
-//   `).join("");
-//   }
-// }
-
-// function filterEmployees() {
-//   const name = document.getElementById("emp-name").value.toLowerCase();
-//   const dept = document.getElementById("emp-dept").value;
-//   const role = document.getElementById("emp-role").value;
-
-//   renderEmployees(employees.filter(e =>
-//     (!name || e.name.toLowerCase().includes(name)) &&
-//     (!dept || e.dept === dept) &&
-//     (!role || e.role === role)
-//   ));
-// }
-
-// function filterManager() {
-//   const id = document.getElementById("emp-id").value.trim().toLowerCase();
-//   const isManager = employees.some(e =>
-//       e.id.toLowerCase() === id &&
-//       e.role === 'Manager')
-//   if (isManager) {
-//     document.querySelector('.filter-panel').removeAttribute('hidden');
-//     document.querySelector('.filter-panel').style.display = 'block';
-//   } else {
-//     document.querySelector('.filter-panel').setAttribute('hidden', 'true');
-//     document.querySelector('.filter-panel').style.display = 'none';
-//   }
-// }
-
-// function resetEmp() {
-//   document.getElementById("emp-name").value = "";
-//   document.getElementById("emp-dept").value = "";
-//   document.getElementById("emp-role").value = "";
-//   const tableWrap = document.getElementById("emp-table");
-//   if (tableWrap) tableWrap.style.display = "none";
-// }
-
 /* Employees */
-const employees = [
-  {
-    id: "E001",
-    name: "Mango Mango",
-    position: "Manager"
-  },
-  {
-    id: "E002",
-    name: "Jane Doe",
-    position: "Sales Associate"
-  }
-];
 
 function renderEmployees(list) {
   const tbody = document.getElementById("emp-tbody");
@@ -163,29 +55,32 @@ async function filterEmployees() {
     console.error("Could not fetch employees:", error);
   }
 }
-// --- OLD filterEmployees() ---
-//_______________________________
-// function filterEmployees() {
-//   const name = document.getElementById("emp-name").value.toLowerCase();
-//   const position = document.getElementById("emp-position").value;
 
-//   renderEmployees(employees.filter(e =>
-//     (!name || e.name.toLowerCase().includes(name)) &&
-//     (!position || e.position === position)
-//   ));
-// }
 
-function filterManager() {
+async function filterManager() {
   const id = document.getElementById("emp-id").value.trim().toLowerCase();
-  const isManager = employees.some(e =>
-      e.id.toLowerCase() === id &&
-      e.position === 'Manager')
-  if (isManager) {
-    document.querySelector('.filter-panel').removeAttribute('hidden');
-    document.querySelector('.filter-panel').style.display = 'block';
-  } else {
-    document.querySelector('.filter-panel').setAttribute('hidden', 'true');
-    document.querySelector('.filter-panel').style.display = 'none';
+  const filterPanel = document.querySelector('.filter-panel');
+
+  try {
+    const response = await fetch('http://localhost:3000/api/managers');
+    if (!response.ok) throw new Error('Failed to fetch managers');
+
+    const managers = await response.json();
+    const isManager = managers.some(manager =>
+      String(manager.EmployeeID).toLowerCase() === id
+    );
+
+    if (isManager) {
+      filterPanel.removeAttribute('hidden');
+      filterPanel.style.display = 'block';
+    } else {
+      filterPanel.setAttribute('hidden', 'true');
+      filterPanel.style.display = 'none';
+    }
+  } catch (error) {
+    console.error("Could not fetch managers:", error);
+    filterPanel.setAttribute('hidden', 'true');
+    filterPanel.style.display = 'none';
   }
 }
 
@@ -287,7 +182,11 @@ function renderTxns(list) {
   tableWrap.style.display = "block";
 
   if (list.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No transactions found.</td></tr>';
+    const target = tbodyAdmin || tbody;
+    const colSpan = tbodyAdmin ? 6 : 5;
+    target.innerHTML = `<tr class="empty-row"><td colspan="${colSpan}">No transactions found.</td></tr>`;
+    updateStats(list);
+    return;
   }
 
   if( tbodyAdmin ) {
@@ -356,6 +255,109 @@ async function filterTransactions() {
   }
 }
 
+function setInsertTransactionMessage(message, isError = false) {
+  const messageEl = document.getElementById("insert-txn-message");
+  if (!messageEl) return;
+
+  messageEl.textContent = message;
+  messageEl.style.color = isError ? "#b00020" : "#1f7a1f";
+}
+
+function getInsertTransactionPayload() {
+  const transactionId = document.getElementById("insert-txn-id").value.trim();
+  const date = document.getElementById("insert-txn-date").value.trim();
+  const totalPrice = document.getElementById("insert-txn-total").value.trim();
+  const cardNumber = document.getElementById("insert-txn-card").value.trim();
+  const assistingEmployee = document.getElementById("insert-txn-employee").value.trim();
+  const customerId = document.getElementById("insert-txn-customer").value.trim();
+
+  if (!/^\d+$/.test(transactionId)) {
+    throw new Error("Transaction ID must be an integer.");
+  }
+
+  if (!date) {
+    throw new Error("Date is required.");
+  }
+
+  if (!/^\d+(\.\d{1,2})?$/.test(totalPrice)) {
+    throw new Error("Total Price must be a valid decimal amount with up to 2 decimal places.");
+  }
+
+  if (!cardNumber || cardNumber.length > 16) {
+    throw new Error("Card Number is required and must be 16 characters or fewer.");
+  }
+
+  if (!/^\d+$/.test(assistingEmployee)) {
+    throw new Error("Assisting Employee must be an integer employee ID.");
+  }
+
+  if (customerId && !/^\d+$/.test(customerId)) {
+    throw new Error("Customer ID must be an integer when provided.");
+  }
+
+  const payload = {
+    TransactionID: Number(transactionId),
+    Date: date,
+    TotalPrice: Number(totalPrice),
+    CardNumber: cardNumber,
+    AssistingEmployee: Number(assistingEmployee)
+  };
+
+  if (customerId) {
+    payload.CustomerID = Number(customerId);
+  }
+
+  return payload;
+}
+
+async function insertTransaction() {
+  try {
+    setInsertTransactionMessage("");
+    const payload = getInsertTransactionPayload();
+
+    const response = await fetch("http://localhost:3000/api/insert-transaction", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || "Failed to insert transaction.");
+    }
+
+    setInsertTransactionMessage(result.message || "Transaction inserted successfully.");
+    resetInsertTransaction(false);
+    await filterTransactions();
+  } catch (error) {
+    console.error("Error inserting transaction:", error);
+    setInsertTransactionMessage(error.message, true);
+  }
+}
+
+function resetInsertTransaction(clearMessage = true) {
+  const fields = [
+    "insert-txn-id",
+    "insert-txn-date",
+    "insert-txn-total",
+    "insert-txn-card",
+    "insert-txn-employee",
+    "insert-txn-customer"
+  ];
+
+  fields.forEach(id => {
+    const field = document.getElementById(id);
+    if (field) field.value = "";
+  });
+
+  if (clearMessage) {
+    setInsertTransactionMessage("");
+  }
+}
+
 function resetTxns() {
   // 1. Clear all the transaction filter inputs
   document.getElementById("txn-id").value = "";
@@ -379,23 +381,3 @@ function resetTxns() {
   if (document.getElementById("stat-pend"))  document.getElementById("stat-pend").textContent  = "0";
   if (document.getElementById("stat-ref"))   document.getElementById("stat-ref").textContent   = "0";
 }
-
-// function filterTxns() {
-//   const id   = document.getElementById("txn-id").value.toLowerCase();
-//   const cust = document.getElementById("cust-name").value.toLowerCase();
-//   const stat = document.getElementById("txn-status").value;
-//   const meth = document.getElementById("txn-method").value;
-//   const emp  = document.getElementById("emp-filter").value.toLowerCase();
-//   const from = document.getElementById("date-from").value;
-//   const to   = document.getElementById("date-to").value;
-
-//   renderTxns(transactions.filter(t =>
-//     (!id   || t.id.toLowerCase().includes(id)) &&
-//     (!cust || t.customer.toLowerCase().includes(cust)) &&
-//     (!stat || t.status === stat) &&
-//     (!meth || t.method === meth) &&
-//     (!emp  || t.employee.toLowerCase().includes(emp)) &&
-//     (!from || t.date >= from) &&
-//     (!to   || t.date <= to)
-//   ));
-// }

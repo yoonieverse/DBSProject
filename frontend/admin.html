@@ -31,6 +31,11 @@
   </div>
 </div>
 
+  <div id="sql-mode-toggle-bar" class="sql-mode-bar" hidden>
+    <span id="mode-label-toggle">Mode: <strong>Safe (Prepared Statements)</strong></span>
+    <button id="mode-toggle-btn" class="btn-mode-safe" onclick="toggleSqlMode()">Switch to Vulnerable</button>
+  </div>
+
 <!--Filter panel-->
   <div class="filter-panel" hidden>
     <h2>Employees</h2>
@@ -143,7 +148,6 @@
       <button class="btn-search" onclick="filterBooks()">Search Books</button>
       <button class="btn-search" onclick="filterTxns()">Search Transactions</button>
       <button class="btn-ghost"  onclick="resetEmp(), resetTxns(), resetForm()" >Reset All</button>
-      <button class="btn-ghost" onclick="logoutAdmin()">Logout</button>
     </div>
   </div>
 
@@ -208,6 +212,11 @@
       </table>
     </div>
   </div>
+
+  <div class="logout-bar">
+    <button onclick="logoutAdmin()" class="btn-logout">Logout</button>
+  </div>
+  
   <footer>
     <span>DBS Bookstore Management System</span>
   </footer>

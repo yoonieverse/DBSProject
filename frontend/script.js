@@ -13,6 +13,52 @@ const employees = [
     since: "2026"
   }
 ];
+const API_BASE_URL = "http://localhost:3000/api";
+let currentSqlInjectionMode = false;
+
+async function fetchSqlMode() {
+  const res = await fetch(`${API_BASE_URL}/mode`);
+  if (!res.ok) throw new Error("Unable to load SQL mode.");
+  return res.json();
+}
+
+function renderSqlMode(modeEnabled) {
+  const bar = document.getElementById("sql-mode-toggle-bar");
+  const label = document.getElementById("mode-label-toggle");
+  const button = document.getElementById("mode-toggle-btn");
+  if (!bar || !label || !button) return;
+
+  bar.hidden = false;
+  bar.classList.remove("mode-safe", "mode-vulnerable");
+  bar.classList.add(modeEnabled ? "mode-vulnerable" : "mode-safe");
+
+  if (modeEnabled) {
+    label.innerHTML = "Mode: <strong>Vulnerable (String Concatenation)</strong>";
+    button.textContent = "Switch to Safe";
+    button.classList.remove("btn-mode-safe");
+    button.classList.add("btn-mode-vulnerable");
+  } else {
+    label.innerHTML = "Mode: <strong>Safe (Prepared Statements)</strong>";
+    button.textContent = "Switch to Vulnerable";
+    button.classList.remove("btn-mode-vulnerable");
+    button.classList.add("btn-mode-safe");
+  }
+}
+
+async function toggleSqlMode() {
+  try {
+    const res = await fetch(`${API_BASE_URL}/mode`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (!res.ok) throw new Error("Failed to update SQL mode.");
+    const data = await res.json();
+    currentSqlInjectionMode = Boolean(data.sqlInjectionMode);
+    renderSqlMode(currentSqlInjectionMode);
+  } catch (err) {
+    alert(err.message);
+  }
+}
 
 function updateResultsWrapperVisibility() {
   const resultsWrapper = document.getElementById("results-wrapper");
@@ -207,24 +253,39 @@ function updateStats(list) {
   document.getElementById("stat-rev").textContent = "$" + revenue.toFixed(2);
 }
 
-function filterTxns() {
-  const id   = document.getElementById("txn-id").value.toLowerCase();
+async function filterTxns() {
+  const idRaw = document.getElementById("txn-id").value.trim();
   const cust = document.getElementById("cust-name").value.toLowerCase();
-  const stat = document.getElementById("txn-status").value;
-  const meth = document.getElementById("txn-method").value;
-  const emp  = document.getElementById("emp-filter").value.toLowerCase();
+  const emp = document.getElementById("emp-filter").value.toLowerCase();
   const from = document.getElementById("date-from").value;
-  const to   = document.getElementById("date-to").value;
+  const to = document.getElementById("date-to").value;
 
-  renderTxns(transactions.filter(t =>
-    (!id   || t.id.toLowerCase().includes(id)) &&
-    (!cust || t.customer.toLowerCase().includes(cust)) &&
-    (!stat || t.status === stat) &&
-    (!meth || t.method === meth) &&
-    (!emp  || t.employee.toLowerCase().includes(emp)) &&
-    (!from || t.date >= from) &&
-    (!to   || t.date <= to)
-  ));
+  const query = new URLSearchParams({
+    tID: idRaw.replace(/[^\d]/g, "") || "0",
+    cName: cust,
+    eName: emp,
+    fromDate: from || "1900-01-01",
+    toDate: to || "9999-12-31"
+  });
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/transactions?${query.toString()}`);
+    if (!res.ok) throw new Error("Failed to fetch transactions.");
+    const rows = await res.json();
+    const mapped = rows.map(r => ({
+      id: `TXN-${r.TransactionID}`,
+      date: r.Date ? String(r.Date).slice(0, 10) : "",
+      customer: [r.CustomerFname, r.CustomerLname].filter(Boolean).join(" ").trim() || "Walk-in",
+      books: r.Books || "N/A",
+      employee: [r.EmployeeFname, r.EmployeeLname].filter(Boolean).join(" ").trim(),
+      method: r.PaymentMethod || "N/A",
+      total: Number(r.TotalAmount || 0),
+      status: r.Status || "Pending"
+    }));
+    renderTxns(mapped);
+  } catch (err) {
+    alert(err.message);
+  }
 }
 
 function resetTxns() {
@@ -294,7 +355,7 @@ function renderBooks(list) {
   }
 }
 
-function filterBooks() {
+async function filterBooks() {
   const title  = document.getElementById("title").value.toLowerCase();
   const author = document.getElementById("author").value.toLowerCase();
   const isbn   = document.getElementById("isbn").value;
@@ -302,13 +363,31 @@ function filterBooks() {
   const min    = parseFloat(document.getElementById("price_min").value) || 0;
   const max    = parseFloat(document.getElementById("price_max").value) || Infinity;
 
-  renderBooks(books.filter(b =>
-    (!title  || b.title.toLowerCase().includes(title)) &&
-    (!author || b.author.toLowerCase().includes(author)) &&
-    (!isbn   || b.isbn.includes(isbn)) &&
-    (!genre  || b.genre === genre) &&
-    (b.price >= min && b.price <= max)
-  ));
+  const query = new URLSearchParams({
+    title,
+    author,
+    isbn,
+    genre: genre === "default" ? "" : genre,
+    minprice: String(min),
+    maxprice: String(max)
+  });
+
+  try {
+    const res = await fetch(`${API_BASE_URL}/books?${query.toString()}`);
+    if (!res.ok) throw new Error("Failed to fetch books.");
+    const rows = await res.json();
+    const mapped = rows.map(r => ({
+      title: r.TITLE,
+      author: r.AUTHOR,
+      genre: r.GENRE,
+      isbn: r.ISBN,
+      price: Number(r.PRICE || 0),
+      stock: Number(r.STOCK || 0)
+    }));
+    renderBooks(mapped);
+  } catch (err) {
+    alert(err.message);
+  }
 }
 
 function resetForm() {
@@ -337,4 +416,13 @@ window.onload = function () {
     loginWrapper.style.display = isAdmin ? "none" : "flex";
     filterPanel.hidden = !isAdmin;
   }
+
+  fetchSqlMode()
+    .then(data => {
+      currentSqlInjectionMode = Boolean(data.sqlInjectionMode);
+      renderSqlMode(currentSqlInjectionMode);
+    })
+    .catch(() => {
+      // Keep the page usable even if backend is down.
+    });
 };

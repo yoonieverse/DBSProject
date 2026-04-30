@@ -14,18 +14,33 @@ const employees = [
   }
 ];
 
+function updateResultsWrapperVisibility() {
+  const resultsWrapper = document.getElementById("results-wrapper");
+  if (!resultsWrapper) return;
+
+  const tableIds = ["emp-table", "book-table", "txn-table"];
+  const hasVisibleTable = tableIds.some(id => {
+    const el = document.getElementById(id);
+    return el && el.style.display === "block";
+  });
+
+  resultsWrapper.style.display = hasVisibleTable ? "block" : "none";
+}
+
 function renderEmployees(list) {
   const tbody = document.getElementById("emp-tbody");
   const tbodyAdmin = document.getElementById("emp-tbody-admin");
   const tableWrap = document.getElementById("emp-table");
+  const targetBody = tbodyAdmin || tbody;
   if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
+  updateResultsWrapperVisibility();
 
 
   // If there is no employees
   if (list.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No employees found.</td></tr>';
+    targetBody.innerHTML = '<tr class="empty-row"><td colspan="8">No employees found.</td></tr>';
     return;
   }
 
@@ -39,8 +54,7 @@ function renderEmployees(list) {
       <td>${e.email}</td>
       <td>${e.phone}</td>
       <td>${e.since}</td>
-<!--      <td><button class="btn-ghost">Edit</button></td>-->
-      <td><a href="edit.html" class="logo">Edit</a></td>
+      <td><a href="edit.html" class="btn-edit">Edit</a></td>
     </tr>
   `).join("");
   } else {
@@ -86,6 +100,7 @@ function filterManager() {
   if (validIds.includes(input)) {
     msg.textContent = 'Logging in...';
     msg.className = 'login-msg success';
+    sessionStorage.setItem("isAdmin", "true");
     setTimeout(() => {
       document.querySelector('.login-wrapper').style.display = 'none';
       document.querySelector('.filter-panel').hidden = false;
@@ -103,6 +118,7 @@ function resetEmp() {
   document.getElementById("emp-role").value = "";
   const tableWrap = document.getElementById("emp-table");
   if (tableWrap) tableWrap.style.display = "none";
+  updateResultsWrapperVisibility();
 }
 
 
@@ -133,12 +149,15 @@ function renderTxns(list) {
   const tbody = document.getElementById("txn-tbody");
   const tbodyAdmin = document.getElementById("txn-tbody-admin");
   const tableWrap = document.getElementById("txn-table");
+  const targetBody = tbodyAdmin || tbody;
   if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
+  updateResultsWrapperVisibility();
 
   if (list.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">No transactions found.</td></tr>';
+    targetBody.innerHTML = '<tr class="empty-row"><td colspan="9">No transactions found.</td></tr>';
+    return;
   }
 
   if( tbodyAdmin ) {
@@ -152,7 +171,7 @@ function renderTxns(list) {
       <td>${t.method}</td>
       <td>$${t.total.toFixed(2)}</td>
       <td>${statusBadge(t.status)}</td>
-      <td><button>Edit</button></td>
+      <td><button class="btn-edit">Edit</button></td>
     </tr>
   `).join("");
   } else {
@@ -215,6 +234,7 @@ function resetTxns() {
   document.getElementById("txn-method").value = "default";
   const tableWrap = document.getElementById("txn-table");
   if (tableWrap) tableWrap.style.display = "none";
+  updateResultsWrapperVisibility();
 }
 
 
@@ -237,12 +257,14 @@ function renderBooks(list) {
   const tbody = document.getElementById("book-tbody");
   const tbodyAdmin = document.getElementById("book-tbody-admin");
   const tableWrap = document.getElementById("book-table");
+  const targetBody = tbodyAdmin || tbody;
   if (!tbody && !tbodyAdmin) return;
 
   tableWrap.style.display = "block";
+  updateResultsWrapperVisibility();
 
   if (list.length === 0) {
-    tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No books found.</td></tr>';
+    targetBody.innerHTML = '<tr class="empty-row"><td colspan="7">No books found.</td></tr>';
     return;
   }
 
@@ -255,7 +277,7 @@ function renderBooks(list) {
       <td class="isbn-cell">${b.isbn}</td>
       <td>$${b.price.toFixed(2)}</td>
       <td class="${b.stock <= 3 ? 'stock-low' : 'stock-ok'}">${b.stock}</td>
-      <td><button>Edit</button></td>
+      <td><button class="btn-edit">Edit</button></td>
     </tr>
   `).join("");
   } else {
@@ -295,11 +317,24 @@ function resetForm() {
   document.getElementById("genre").value = "default";
   const tableWrap = document.getElementById("book-table");
   if (tableWrap) tableWrap.style.display = "none";
+  updateResultsWrapperVisibility();
 }
 
+function logoutAdmin() {
+  sessionStorage.removeItem("isAdmin");
+  window.location.href = "admin.html";
+}
 
 /* Auto Load */
 window.onload = function () {
   const el = document.getElementById("footer-time");
   if (el) el.textContent = new Date().toLocaleString();
+
+  const loginWrapper = document.querySelector(".login-wrapper");
+  const filterPanel = document.querySelector(".filter-panel");
+  if (loginWrapper && filterPanel) {
+    const isAdmin = sessionStorage.getItem("isAdmin") === "true";
+    loginWrapper.style.display = isAdmin ? "none" : "flex";
+    filterPanel.hidden = !isAdmin;
+  }
 };

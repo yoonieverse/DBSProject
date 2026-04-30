@@ -143,65 +143,70 @@
       <button class="btn-search" onclick="filterBooks()">Search Books</button>
       <button class="btn-search" onclick="filterTxns()">Search Transactions</button>
       <button class="btn-ghost"  onclick="resetEmp(), resetTxns(), resetForm()" >Reset All</button>
+      <button class="btn-ghost" onclick="logoutAdmin()">Logout</button>
     </div>
   </div>
 
-<!--  emp table -->
-  <div class="table-wrap" id="emp-table" style="display: none">
-    <table>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Role</th>
-        <th>Department</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Since</th>
-        <th>Edit</th>
-      </tr>
-      </thead>
-      <tbody id="emp-tbody-admin"></tbody>
-    </table>
-  </div>
+  <div class="results-wrapper" id="results-wrapper" style="display: none">
+    <!-- Employees -->
+    <div class="table-wrap" id="emp-table" style="display: none">
+      <h3 class="results-title">Employees</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Since</th>
+          <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody id="emp-tbody-admin"></tbody>
+      </table>
+    </div>
 
+    <!-- Books -->
+    <div class="table-wrap" id="book-table" style="display: none">
+      <h3 class="results-title">Books</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Genre</th>
+          <th>ISBN</th>
+          <th>Price</th>
+          <th>Stock</th>
+          <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody id="book-tbody-admin"></tbody>
+      </table>
+    </div>
 
-  <!--Books-->
-  <div class="table-wrap" id="book-table" style="display: none">
-    <table>
-      <thead>
-      <tr>
-        <th>Title</th>
-        <th>Author</th>
-        <th>Genre</th>
-        <th>ISBN</th>
-        <th>Price</th>
-        <th>Stock</th>
-        <th>Edit</th>
-      </tr>
-      </thead>
-      <tbody id="book-tbody-admin"></tbody>
-    </table>
-  </div>
-
-  <!--  Transactions-->
-  <div class="table-wrap" id="txn-table" style="display: none">
-    <table>
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Customer</th>
-        <th>Books</th>
-        <th>Employee</th>
-        <th>Method</th>
-        <th>Total</th>
-        <th>Status</th>
-        <th>Edit</th>
-      </tr>
-      </thead>
-      <tbody id="txn-tbody-admin"></tbody>
-    </table>
+    <!-- Transactions -->
+    <div class="table-wrap" id="txn-table" style="display: none">
+      <h3 class="results-title">Transactions</h3>
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Books</th>
+          <th>Employee</th>
+          <th>Method</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Edit</th>
+        </tr>
+        </thead>
+        <tbody id="txn-tbody-admin"></tbody>
+      </table>
+    </div>
   </div>
   <footer>
     <span>DBS Bookstore Management System</span>

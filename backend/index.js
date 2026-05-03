@@ -3,8 +3,11 @@ const express = require('express');
 const mysql = require('mysql2/promise');
 const cors = require('cors'); // Run: npm install cors
 const app = express();
+<<<<<<< HEAD
 const path = require("path");
 app.use(express.static(path.join(__dirname, "../frontend")));
+=======
+>>>>>>> main
 
 app.use(cors()); // Allows your HTML file to talk to this server
 app.use(express.json());
@@ -15,6 +18,10 @@ const dbConfig = {
   password: process.env.DB_PASSWORD,
   database: 'Bookstore'
 };
+<<<<<<< HEAD
+=======
+let sqlInjectionMode = false;
+>>>>>>> main
 
 // This creates an API endpoint: http://localhost:3000/api/employees
 app.get('/api/employees', async (req, res) => {
@@ -43,6 +50,7 @@ app.get('/api/books', async (req, res) => {
 
   try {
     const connection = await mysql.createConnection(dbConfig);
+<<<<<<< HEAD
     
     // This query uses (Column LIKE ? OR ? = '') which is safer for NULLs 
     // and correctly ignores empty search fields.
@@ -63,6 +71,38 @@ app.get('/api/books', async (req, res) => {
     ];
 
     const [rows] = await connection.execute(query, params);
+=======
+    let rows;
+
+    if (sqlInjectionMode) {
+      const query = `
+        SELECT * FROM Books
+        WHERE (ISBN LIKE '%${isbn}%' OR '${isbn}' = '')
+          AND (TITLE LIKE '%${title}%' OR '${title}' = '')
+          AND (AUTHOR LIKE '%${author}%' OR '${author}' = '')
+          AND (GENRE LIKE '%${genre}%' OR '${genre}' = '')
+          AND PRICE BETWEEN ${minprice} AND ${maxprice};
+      `;
+      [rows] = await connection.query(query);
+    } else {
+      const query = `
+        SELECT * FROM Books
+        WHERE (ISBN LIKE ? OR ? = '')
+          AND (TITLE LIKE ? OR ? = '')
+          AND (AUTHOR LIKE ? OR ? = '')
+          AND (GENRE LIKE ? OR ? = '')
+          AND PRICE BETWEEN ? AND ?`;
+      const params = [
+        `%${isbn}%`, isbn,
+        `%${title}%`, title,
+        `%${author}%`, author,
+        `%${genre}%`, genre,
+        minprice, maxprice
+      ];
+      [rows] = await connection.execute(query, params);
+    }
+
+>>>>>>> main
     await connection.end();
     res.json(rows);
   } catch (error) {
@@ -72,7 +112,11 @@ app.get('/api/books', async (req, res) => {
 });
 
 app.get('/api/transactions', async (req, res) => {
+<<<<<<< HEAD
   const transactionId = req.query.tID || 0;
+=======
+  const transactionId = Number.parseInt(req.query.tID, 10) || 0;
+>>>>>>> main
   const customerName = req.query.cName || '';
   const employeeName = req.query.eName || '';
   const fromDate = req.query.fromDate || '1900-01-01';
@@ -80,6 +124,7 @@ app.get('/api/transactions', async (req, res) => {
 
   try {
     const connection = await mysql.createConnection(dbConfig);
+<<<<<<< HEAD
     const query = `SELECT 
     T.*, 
     E.Fname AS EmployeeFname, 
@@ -103,6 +148,60 @@ WHERE (T.TransactionID = ? OR ? = 0)
     fromDate, toDate];
 
     const [rows] = await connection.execute(query, params);
+=======
+    let rows;
+
+    if (sqlInjectionMode) {
+      const query = `SELECT 
+      T.*, 
+      E.Fname AS EmployeeFname, 
+      E.Lname AS EmployeeLname,
+      LP.Fname AS CustomerFname,
+      LP.Lname AS CustomerLname
+    FROM Transactions T
+    INNER JOIN Employee E 
+      ON T.AssistingEmployee = E.EmployeeID
+    LEFT JOIN LoyaltyTransaction LT 
+      ON T.TransactionID = LT.TransactionID
+    LEFT JOIN LoyaltyProgram LP 
+      ON LT.CustomerID = LP.CustomerID
+    WHERE (T.TransactionID = ${transactionId} OR ${transactionId} = 0)
+      AND (LP.Fname LIKE '%${customerName}%' 
+        OR LP.Lname LIKE '%${customerName}%' 
+        OR '${customerName}' = '')
+      AND (E.Fname LIKE '%${employeeName}%' 
+        OR E.Lname LIKE '%${employeeName}%' 
+        OR '${employeeName}' = '')
+      AND (T.Date BETWEEN '${fromDate}' AND '${toDate}');`;
+      [rows] = await connection.query(query);
+    } else {
+      const query = `SELECT 
+      T.*, 
+      E.Fname AS EmployeeFname, 
+      E.Lname AS EmployeeLname,
+      LP.Fname AS CustomerFname,
+      LP.Lname AS CustomerLname
+    FROM Transactions T
+    INNER JOIN Employee E 
+      ON T.AssistingEmployee = E.EmployeeID
+    LEFT JOIN LoyaltyTransaction LT 
+      ON T.TransactionID = LT.TransactionID
+    LEFT JOIN LoyaltyProgram LP 
+      ON LT.CustomerID = LP.CustomerID
+    WHERE (T.TransactionID = ? OR ? = 0)
+      AND (LP.Fname LIKE ? OR LP.Lname LIKE ? OR ? = '')
+      AND (E.Fname LIKE ? OR E.Lname LIKE ? OR ? = '')
+      AND (T.Date BETWEEN ? AND ?);`;
+      const params = [
+        transactionId, transactionId,
+        `%${customerName}%`, `%${customerName}%`, customerName,
+        `%${employeeName}%`, `%${employeeName}%`, employeeName,
+        fromDate, toDate
+      ];
+      [rows] = await connection.execute(query, params);
+    }
+
+>>>>>>> main
     await connection.end();
     res.json(rows);
 
@@ -113,6 +212,7 @@ WHERE (T.TransactionID = ? OR ? = 0)
 
 
 });
+<<<<<<< HEAD
 
 app.post('/api/insert-transaction', async (req, res) => {
   const {
@@ -219,6 +319,20 @@ app.get('/api/managers', async (req, res) => {
     console.error("DB Error:", error);
     res.status(500).json({ error: error.message });
   }
+=======
+app.get('/api/mode', (req, res) => {
+  res.json({ sqlInjectionMode });
+});
+
+app.post('/api/mode', (req, res) => {
+  const { sqlInjectionMode: nextMode } = req.body || {};
+  if (typeof nextMode === 'boolean') {
+    sqlInjectionMode = nextMode;
+  } else {
+    sqlInjectionMode = !sqlInjectionMode;
+  }
+  res.json({ sqlInjectionMode });
+>>>>>>> main
 });
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

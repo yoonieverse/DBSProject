@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stables and Peasants — Edit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<h2>Employees</h2>
+<div class="filter-panel">
+  <h2>Filter</h2>
+  <div class="filter-grid">
+    <div class="filter-group">
+      <label for="emp-name">Name</label>
+      <input type="text" id="emp-name" placeholder="Search name…">
+    </div>
+    <div class="filter-group">
+      <label for="emp-dept">Department</label>
+      <select id="emp-dept">
+        <option value="">All Departments</option>
+        <option>Management</option>
+        <option>Sales</option>
+        <option>Inventory</option>
+        <option>Customer Service</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label for="emp-role">Role</label>
+      <select id="emp-role">
+        <option value="">All Roles</option>
+        <option>Manager</option>
+        <option>Associate</option>
+        <option>Cashier</option>
+        <option>Stock Clerk</option>
+      </select>
+    </div>
+    <div class="filter-actions">
+      <button class="btn-search" onclick="editEmployee()">Save Changes</button>
+      <nav><a href="admin.html">Cancel</a></nav>
+<!--      <button class="btn-ghost" onclick="resetEmp()">Cancel</button>-->
+    </div>
+  </div>
+</div>
+
+  <script src="script.js"></script>
+  <script src="edit.js"></script>
+
+</body>
+
+</html>

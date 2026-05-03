@@ -12,12 +12,17 @@
   <a class="logo" href= "menu.html">Stables and Peasants</div>
   <nav>
     <a href="books.html">Books</a>
-    <a href="employees.html">Employees</a>
     <a href="transactions.html" class="active">Transactions</a>
+    <a href="admin.html">Admin Portal</a>
   </nav>
 </header>
 
 <main>
+  <div id="sql-mode-toggle-bar" class="sql-mode-bar" hidden>
+    <span id="mode-label-toggle">Mode: <strong>Safe (Prepared Statements)</strong></span>
+    <button id="mode-toggle-btn" class="btn-mode-safe" disabled>Only toggle in Admin Portal</button>
+  </div>
+
   <div class="page-header">
     <h1>Transactions</h1>
     <p>Sales records &amp; payment history</p>

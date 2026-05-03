@@ -213,7 +213,6 @@ function renderTxns(list) {
       <td>${t.date}</td>
       <td>${t.customer}</td>
       <td>${t.employee}</td>
-      <td>${t.method}</td>
       <td>$${t.total.toFixed(2)}</td>
       <td>${statusBadge(t.status)}</td>
       <td><button class="btn-edit">Edit</button></td>

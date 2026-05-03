@@ -375,21 +375,12 @@ async function filterBooks() {
     if (!res.ok) throw new Error("Failed to fetch books.");
     const rows = await res.json();
     const mapped = rows.map(r => ({
-<<<<<<< HEAD
       title: r.Title,
       author: r.Author,
       genre: r.Genre,
       isbn: r.ISBN,
       price: Number(r.Price || 0),
       stock: Number(r.NumberInStock || 0)
-=======
-      title: r.TITLE,
-      author: r.AUTHOR,
-      genre: r.GENRE,
-      isbn: r.ISBN,
-      price: Number(r.PRICE || 0),
-      stock: Number(r.STOCK || 0)
->>>>>>> main
     }));
     renderBooks(mapped);
   } catch (err) {

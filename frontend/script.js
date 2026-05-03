@@ -212,7 +212,6 @@ function renderTxns(list) {
       <td class="id-cell">${t.id}</td>
       <td>${t.date}</td>
       <td>${t.customer}</td>
-      <td>${t.books}</td>
       <td>${t.employee}</td>
       <td>${t.method}</td>
       <td>$${t.total.toFixed(2)}</td>

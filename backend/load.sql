@@ -1,0 +1,56 @@
+-- load.sql
+USE Bookstore;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE LoyaltyTransaction;
+TRUNCATE TABLE BooksPurchased;
+TRUNCATE TABLE Wage;
+TRUNCATE TABLE Transactions;
+TRUNCATE TABLE LoyaltyProgram;
+TRUNCATE TABLE Books;
+TRUNCATE TABLE Employee;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Books.csv'
+	INTO TABLE Books
+	FIELDS TERMINATED BY ','
+    OPTIONALLY ENCLOSED BY '"'
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/BooksPurchased.csv'
+	INTO TABLE BooksPurchased
+	FIELDS TERMINATED BY ','
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Employee.csv'
+	INTO TABLE Employee
+	FIELDS TERMINATED BY ','
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/LoyaltyProgram.csv'
+	INTO TABLE LoyaltyProgram
+	FIELDS TERMINATED BY ','
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/LoyaltyTransaction.csv'
+	INTO TABLE LoyaltyTransaction
+	FIELDS TERMINATED BY ','
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Transactions.csv'
+	INTO TABLE Transactions
+	FIELDS TERMINATED BY ','
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/Wage.csv'
+	INTO TABLE Wage
+	FIELDS TERMINATED BY ','
+	LINES TERMINATED BY '\n'
+	IGNORE 1 ROWS;
+
